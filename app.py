@@ -9,6 +9,7 @@ from langchain_core.prompts import ChatPromptTemplate
 from dotenv import load_dotenv
 from src.prompt import *
 import os
+from flask_compress import Compress
 
 app = Flask(__name__)
 
