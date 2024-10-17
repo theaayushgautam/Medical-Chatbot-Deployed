@@ -1,3 +1,4 @@
+from waitress import serve
 from flask import Flask, render_template, jsonify, request
 from src.helper import download_hugging_face_embeddings
 from langchain_pinecone import PineconeVectorStore
@@ -62,5 +63,9 @@ def chat():
 
 
 
-if __name__ == '__main__':
-    app.run(host="0.0.0.0", port= 5000, debug= True)
+# if __name__ == '__main__':
+#     app.run(host="0.0.0.0", port= 5000, debug= True)
+
+if __name__ == "__main__":
+    from waitress import serve
+    serve(app, host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
