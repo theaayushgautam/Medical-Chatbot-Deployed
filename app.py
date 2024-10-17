@@ -51,14 +51,31 @@ def index():
     return render_template('chat.html')
 
 
-@app.route("/get", methods=["GET", "POST"])
+# @app.route("/get", methods=["GET", "POST"])   BAPPY
+# def chat():
+#     msg = request.form["msg"]
+#     input = msg
+#     print(input)
+#     response = rag_chain.invoke({"input": msg})
+#     print("Response : ", response["answer"])
+#     return str(response["answer"])
+
+
+@app.route("/get", methods=["GET", "POST"])  #Aayush
 def chat():
     msg = request.form["msg"]
     input = msg
-    print(input)
+    
+    # Process input and get response
     response = rag_chain.invoke({"input": msg})
-    print("Response : ", response["answer"])
+    
+    # If response is large, consider truncating or compressing
+    if len(response["answer"]) > 1000:  # Adjust threshold as needed
+        response["answer"] = response["answer"][:1000] + "..."
+
     return str(response["answer"])
+
+
 
 
 
