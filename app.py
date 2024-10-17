@@ -62,39 +62,32 @@ def index():
 
 
 @app.route("/get", methods=["GET", "POST"])  #Aayush
-# def chat():
-#     msg = request.form["msg"]
-#     input = msg
-    
-#     # Process input and get response
-#     response = rag_chain.invoke({"input": msg})
-    
-#     # If response is large, consider truncating or compressing
-#     if len(response["answer"]) > 1000:  # Adjust threshold as needed
-#         response["answer"] = response["answer"][:1000] + "..."
-
-#     return str(response["answer"])
-
 def chat():
     msg = request.form["msg"]
     input = msg
-    print(f"Input received: {input}")
     
+    # Process input and get response
     response = rag_chain.invoke({"input": msg})
-    print(f"Response: {response['answer']}")
     
-    # Convert the response to JSON and calculate its size
-    response_str = json.dumps(response["answer"])
-    response_size = sys.getsizeof(response_str)
-    
-    print(f"Response size: {response_size} bytes")
-    
-    # Check if the response size exceeds the Vercel Lambda payload limit
-    if response_size > 6 * 1024 * 1024:  # 6 MB in bytes
-        return "Error: Response is too large", 413  # HTTP 413 Payload Too Large
-    
+    # If response is large, consider truncating or compressing
+    if len(response["answer"]) > 300:  # Adjust threshold as needed
+        response["answer"] = response["answer"][:300] + "..."
+
     return str(response["answer"])
 
+
+    
+#     return str(response["answer"])
+
+@app.route("/get_data", methods=["GET"])
+def get_data():
+    # Example of how to limit or paginate data
+    page = request.args.get("page", 1, type=int)
+    per_page = 100  # Limit to 100 results per page
+    
+    data = large_data_source.paginate(page, per_page)
+    
+    return jsonify(data)
 
 
 
